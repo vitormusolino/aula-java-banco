@@ -1,16 +1,22 @@
 package br.com.fiap.repositorio;
 
-import br.com.fiap.entidade.Endereco;
-
 import java.util.List;
+
+import br.com.fiap.entidade.Endereco;
 
 public interface EnderecoRepositorio {
 
-    public List<Endereco> listar();
+	public int criar(Endereco endereco); // Create
 
-    public int criar(Endereco endereco);
+	public Endereco obter(int idAluno); // Read
+		
+	public int atualizar(Endereco endereco); // Update
+	
+	public int remover(int id); // Delete
+	
+	public int removerPorAluno(int idAluno);
+	
+	public List<Endereco> listar(int idAluno); 
+	
 
-    public int atualizar(Endereco endereco);
-
-    public int remover(int id);
 }

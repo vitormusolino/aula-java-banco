@@ -1,133 +1,119 @@
 package br.com.fiap.repositorio;
 
-import br.com.fiap.entidade.Aluno;
-import br.com.fiap.entidade.Endereco;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
-public class EnderecoRepositorioImpl implements EnderecoRepositorio{
+import br.com.fiap.entidade.Endereco;
 
+public class EnderecoRepositorioImpl implements EnderecoRepositorio {
 
-    public List<Endereco> listar() {
-        Connection conn = new Conexao().obterConexao();
-        List<Endereco> enderecos = new ArrayList<Endereco>();
+	public int criar(Endereco endereco) {
 
-        try{
-            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM ENDERECO");
-            ResultSet rs = pstmt.executeQuery();
+		Connection conn = new Conexao().obterConexao();
 
-            while (rs.next()) {
-                Endereco endereco = new Endereco();
+		int resultado = 0;
 
-                endereco.setId(rs.getInt(1));
-                endereco.setLogradouro(rs.getString(2));
+		try {
 
-                enderecos.add(endereco);
-            }
+			PreparedStatement pstmt = conn.prepareStatement(
+					"INSERT INTO ENDERECO (IDENDERECO, LOGRADOURO, NUMERO, COMPLEMENTO, BAIRRO, UF, CEP, IDALUNO) "
+							+ "VALUE (?, ?, ?, ?, ?, ?, ?, ?)");
 
-            rs.close();
-            pstmt.close();
-        } catch (SQLException sqlEx) {
-            System.out.println(sqlEx.getMessage());
-        } finally {
-            try{
-                conn.close();
-            } catch (SQLException e){
-                System.out.println(e.getMessage());
-            }
-        }
+			pstmt.setInt(1, endereco.getIdEndereco());
+			pstmt.setString(2, endereco.getLogradouro());
+			pstmt.setString(3, endereco.getNumero());
+			pstmt.setString(4, endereco.getComplemento());
+			pstmt.setString(5, endereco.getBairro());
+			pstmt.setString(6, endereco.getUf());
+			pstmt.setString(7, endereco.getCep());
+			pstmt.setInt(8, endereco.getIdAluno());
 
-        return enderecos;
-    }
+			resultado = pstmt.executeUpdate();
 
-    public int criar(Endereco endereco) {
+			pstmt.close();
 
-        Connection conn = new Conexao().obterConexao();
+		} catch (SQLException ex) {
+			System.out.println(ex.getMessage());
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				System.out.println(e.getMessage());
+			}
+		}
 
-        int resultado = 0;
+		return resultado;
 
-        try {
+	}
 
-            PreparedStatement pstmt = conn.prepareStatement("INSERT INTO ENDERECO (IDENDERECO, LOGRADOURO, NUMERO) VALUE (?, ?, ?)");
+	public Endereco obter(int idAluno) {
 
-            pstmt.setInt(1, endereco.getId());
-            pstmt.setString(2, endereco.getLogradouro());
-            pstmt.setInt(3, endereco.getNumero());
+		Endereco endereco = null;
 
-            resultado = pstmt.executeUpdate();
+		Connection conn = new Conexao().obterConexao();
 
-            pstmt.close();
+		try {
 
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-        } finally {
-            try {
-                conn.close();
-            } catch (SQLException e) {
-                System.out.println(e.getMessage());			}
-        }
+			PreparedStatement pstmt = conn.prepareStatement(
+					"SELECT IDENDERECO, LOGRADOURO, NUMERO, COMPLEMENTO, BAIRRO, UF, CEP, IDALUNO FROM ENDERECO WHERE IDALUNO = ?");
 
-        return resultado;
-    }
+			pstmt.setInt(1, idAluno);
 
-    public int atualizar(Endereco endereco){
-        Connection conn = new Conexao().obterConexao();
+			ResultSet rs = pstmt.executeQuery();
 
-        int resultado = 0;
+			if (rs.next()) {
 
-        try {
+				endereco = new Endereco();
 
-            PreparedStatement pstmt = conn.prepareStatement("UPDATE LOGRADOURO SET LOGRADOURO =? WHERE IDENDERECO = ?");
+				endereco.setIdEndereco(rs.getInt(1));
+				endereco.setLogradouro(rs.getString(2));
+				endereco.setNumero(rs.getString(3));
+				endereco.setComplemento(rs.getString(4));
+				endereco.setBairro(rs.getString(5));
+				endereco.setUf(rs.getString(6));
+				endereco.setCep(rs.getString(7));
+				endereco.setIdAluno(rs.getInt(8));
 
-            pstmt.setInt(1, endereco.getId());
-            pstmt.setString(2, endereco.getLogradouro());
+			}
 
-            resultado = pstmt.executeUpdate();
+			rs.close();
+			pstmt.close();
 
-            pstmt.close();
+		} catch (SQLException sqlEx) {
+			System.out.println(sqlEx.getMessage());
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				System.out.println(e.getMessage());
+			}
+		}
 
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-        } finally {
-            try {
-                conn.close();
-            } catch (SQLException e) {
-                System.out.println(e.getMessage());			}
-        }
+		return endereco;
 
-        return resultado;
-    }
+	}
 
-    public int remover(int id){
-        Connection conn = new Conexao().obterConexao();
+	public int atualizar(Endereco endereco) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
-        int resultado = 0;
+	public int remover(int id) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
-        try {
+	public int removerPorAluno(int idAluno) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
-            PreparedStatement pstmt = conn.prepareStatement("DELETE FROM LOGRADOURO WHERE IDENDERECO = ?");
-
-            pstmt.setInt(1, id);
-            resultado = pstmt.executeUpdate();
-
-            pstmt.close();
-
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-        } finally {
-            try {
-                conn.close();
-            } catch (SQLException e) {
-                System.out.println(e.getMessage());			}
-        }
-
-        return resultado;
-    }
-
+	public List<Endereco> listar(int idAluno) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

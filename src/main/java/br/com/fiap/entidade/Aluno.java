@@ -5,6 +5,8 @@ public class Aluno {
 	private int id;
 	
 	private String nome;
+	
+	private Endereco endereco;
 
 	public int getId() {
 		return id;
@@ -21,10 +23,20 @@ public class Aluno {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
+	
+	public Endereco getEndereco() {
+		return endereco;
+	}
+
+	public void setEndereco(Endereco endereco) {
+		this.endereco = endereco;
+		this.endereco.setIdAluno(this.id);
+	}
 
 	@Override
 	public String toString() {
-		return "Aluno [id=" + id + ", " + (nome != null ? "nome=" + nome : "") + "]";
+		return "Aluno [id=" + id + ", " + (nome != null ? "nome=" + nome + ", " : "")
+				+ (endereco != null ? "endereco=" + endereco : "") + "]";
 	}
 	
 	

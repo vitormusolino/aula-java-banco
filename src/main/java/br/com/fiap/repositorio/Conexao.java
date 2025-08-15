@@ -21,6 +21,7 @@ public class Conexao {
 			conn = DriverManager.getConnection(url, user, pwd);
 			
 			if (conn != null) {
+				conn.setAutoCommit(false);
 				System.out.println("Conexão estabelecida com sucesso!!");
 			} else {
 				System.out.println("Conexão não estabelecida!!");
@@ -31,12 +32,17 @@ public class Conexao {
 			System.out.println(e.getMessage());
 		}
 		
+		
 		return conn;
+		
 	}
-
+	
 	public static void main(String[] args) {
+		
 		Conexao con = new Conexao();
 		con.obterConexao();
+		
 	}
+	
 
 }
